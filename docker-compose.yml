@@ -21,6 +21,8 @@ services:
     # image: docker-drush6-php53
     container_name: d6mysql
     restart: unless-stopped
+    volumes:
+      - db_d601_data:/var/lib/mysql
     env_file: .env
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
@@ -33,4 +35,7 @@ services:
 networks:
   d601-network:
     driver: bridge
+
+volumes:
+  db_d601_data:
 #    bash -c 'php -r "readfile('https://s3.amazonaws.com/files.drush.org/drush.phar');" drush  && chmod +x drush && mv drush /usr/local/bin'
