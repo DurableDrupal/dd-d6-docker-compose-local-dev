@@ -23,10 +23,10 @@ services:
     restart: unless-stopped
     env_file: .env
     environment:
-      - MYSQL_ROOT_PASSWORD=drupalroot
-      - MYSQL_DATABASE=drupal601
-      - MYSQL_USER=drupal601
-      - MYSQL_PASSWORD=drupal601p
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     networks:
       - d601-network
 

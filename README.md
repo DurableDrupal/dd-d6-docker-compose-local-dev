@@ -116,9 +116,21 @@ in interactive install, cite mysql host and port in advanced settings as follows
 
 ### Reset to uninstalled status
 
+```
+Creating network "attempt01_d601-network" with driver "bridge"
+Creating d6mysql ... done
+Creating d6web   ... done
+victorkane@Victors-MacBook-Air attempt01 % docker-compose down -v --rmi all
+Stopping d6web   ... done
+Stopping d6mysql ... done
+Removing d6web   ... done
+Removing d6mysql ... done
+Removing network attempt01_d601-network
+Removing image mysql:5.6
+Removing image d6web
+```
+
 Adjust the directory `drupal-6.38/sites/default/` as follows:
-
-
 
 ```bash
 % docker-compose down
