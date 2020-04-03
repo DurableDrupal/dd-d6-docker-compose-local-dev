@@ -148,6 +148,21 @@ drwxrwxrwx  3 victorkane  staff     96 Apr  3 11:48 files
 %
 ```
 
+### Persist db with volume (bridge)
+
+Just a few lines in the `docker-compose.yml` file:
+
+```yaml
+  ...
+  d6mysql:
+    ...
+    volumes:
+      - db_d601_data:/var/lib/mysql
+    ...
+volumes:
+  db_d601_data:
+```
+
 ### Refs
 
 - [Docker for Legacy Drupal Development](:/0267f841e7c7464b9be35acb4d1b696a)
