@@ -163,6 +163,126 @@ volumes:
   db_d601_data:
 ```
 
+### Back up the db just to be sure
+
+```bash
+root@137949ae85b4:/# mysqldump -u drupal601 -p drupal601 > db.sq
+root@137949ae85b4:/# head -20 db.sql
+-- MySQL dump 10.13  Distrib 5.6.47, for Linux (x86_64)
+--
+-- Host: localhost    Database: drupal601
+-- ------------------------------------------------------
+-- Server version	5.6.47
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `access`
+--
+root@137949ae85b4:/# exit
+docker cp d6mysql:/db.sql backup
+% ls -l backup
+total 1496
+-rw-r--r--  1 victorkane  staff  762908 Apr  3 16:27 db.sql
+```
+
+### Test db persistence in volume
+
+First down the app, removing images but not volumes. Then build, come back up, check to make sure site still up with content and admin login.
+
+```bash
+% docker-compose down --rmi all
+Stopping d6web   ... done
+Stopping d6mysql ... done
+Removing d6web   ... done
+Removing d6mysql ... done
+Removing network attempt01_d601-network
+Removing image mysql:5.6
+Removing image d6web
+victorkane@Victors-MacBook-Air attempt01 % grep mysql drupal-6.38/sites/default/settings.php
+ *   $db_url = 'mysql://username:password@localhost/databasename';
+ *   $db_url = 'mysqli://username:password@localhost/databasename';
+$db_url = 'mysqli://drupal601:drupal601p@d6mysql:3306/drupal601';
+% docker-compose build
+d6mysql uses an image, skipping
+Building d6web
+Step 1/4 : FROM nimmis/apache-php5
+ ---> 2f18ea462e8a
+Step 2/4 : WORKDIR /var/www/html
+ ---> Using cache
+ ---> 666366153094
+Step 3/4 : COPY ./drupal-6.38/ /var/www/html/
+ ---> de1a2b3fae81
+Step 4/4 : EXPOSE 80
+ ---> Running in 9a4123d55eb1
+Removing intermediate container 9a4123d55eb1
+ ---> f50053ad862d
+Successfully built f50053ad862d
+Successfully tagged d6web:latest
+% docker-compose up -d
+Creating network "attempt01_d601-network" with driver "bridge"
+Pulling d6mysql (mysql:5.6)...
+5.6: Pulling from library/mysql
+48839397421a: Pull complete
+725652de4539: Pull complete
+e4e83fcf33af: Pull complete
+d22eed95a35d: Pull complete
+7c6413e9e73a: Pull complete
+db37ee61b2cc: Pull complete
+5f352f2d0e1b: Pull complete
+6f664886aa54: Pull complete
+7f4961f446cc: Pull complete
+7e610963b475: Pull complete
+2b007da11435: Pull complete
+Digest: sha256:f0165a6f800d183ca92ab822e2fe6157acebc5752bab3ca2b9e805b2fa894bc8
+Status: Downloaded newer image for mysql:5.6
+Creating d6mysql ... done
+Creating d6web   ... done
+```
+
+Indeed, everything comes up, reload page, logout, login, check content, story and page still there.
+
+### TODO clean url's
+
+```bash
+a2enmod rewrite
+Enabling module rewrite.
+To activate the new configuration, you need to run:
+  service apache2 restart
+root@602acc2b32d7:/var/www/html# service apache2 restart
+ * Restarting web server apache2
+
+cat /etc/apache2/sites-available/ 000-default.conf
+
+<VirtualHost *:80>
+
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/html
+          <Directory "/var/www/html">
+                Options Indexes FollowSymLinks MultiViews
+                AllowOverride All
+                Order allow,deny
+                allow from all
+          </Directory>
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+</VirtualHost *:80>
+
+```
+
+Then enable at http://192.168.99.101:10080/?q=admin/settings/clean-urls (assuming clean url test passes and the enable option is not disabled)
+
 ### Refs
 
 - [Docker for Legacy Drupal Development](:/0267f841e7c7464b9be35acb4d1b696a)
