@@ -278,10 +278,19 @@ cat /etc/apache2/sites-available/ 000-default.conf
         CustomLog ${APACHE_LOG_DIR}/access.log combined
 
 </VirtualHost *:80>
-
 ```
 
 Then enable at http://192.168.99.101:10080/?q=admin/settings/clean-urls (assuming clean url test passes and the enable option is not disabled)
+
+This hard-coded config plus of course db config (persisted in volume) survives stop/start but not down (container destroyed without committing changes to new image)
+
+```
+% docker-compose stop
+
+% docker-compose start
+```
+
+TODO create image that manages this with command in original image creation (build/up)
 
 ### Refs
 
