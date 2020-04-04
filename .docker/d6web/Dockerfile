@@ -1,4 +1,5 @@
 FROM nimmis/apache-php5
+MAINTAINER victorkane@awebfactory.com
 
 WORKDIR /var/www/html
 

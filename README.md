@@ -292,6 +292,44 @@ This hard-coded config plus of course db config (persisted in volume) survives s
 
 TODO create image that manages this with command in original image creation (build/up)
 
+### Backup a container set's volatile data before downing
+
+- Create top-level db-backups directory
+  - .keep file
+  - gitignore common backup files ()
+- Small & medium
+  - backup database
+
+#### Using container's mysql client and local host file system without volume
+
+```bash
+% docker exec  d6mysql which mysqldump
+/usr/bin/mysqldump
+% docker exec -it d6mysql /usr/bin/mysqldump -u drupal601 -p drupal601 > ./db-backups/202004041426-db.sql
+victorkane@Victors-MacBook-Air attempt01 % ls -l db-backups
+total 9704
+-rw-r--r--  1 victorkane  staff  1187055 Apr  4 14:26 202004041426-db.sql
+```
+
+### Add more features to the `d6web` container
+
+So we'll stop our container set and delete the containers and images, but without killing the database volume. Then we'll make these changes, build and bring up again.
+
+```bash
+docker-compose down --rmi all
+```
+
+- Move from project root to `.docker` subdir with its own name
+- Add clean urls to the image
+
+### Add a drush container to the set
+
+```bash
+bash -c 'php -r "readfile('https://s3.amazonaws.com/files.drush.org/drush.phar');" drush  && chmod +x drush && mv drush /usr/local/bin'
+```
+
+### Use the drush container for various tasks
+
 ### Refs
 
 - [Docker for Legacy Drupal Development](:/0267f841e7c7464b9be35acb4d1b696a)

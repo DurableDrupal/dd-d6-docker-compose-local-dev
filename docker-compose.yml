@@ -4,7 +4,7 @@ services:
   d6web:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: .docker/d6web/Dockerfile
     image: d6web
     container_name: d6web
     restart: unless-stopped
@@ -38,4 +38,3 @@ networks:
 
 volumes:
   db_d601_data:
-#    bash -c 'php -r "readfile('https://s3.amazonaws.com/files.drush.org/drush.phar');" drush  && chmod +x drush && mv drush /usr/local/bin'
