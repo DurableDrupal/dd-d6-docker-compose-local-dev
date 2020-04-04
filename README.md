@@ -313,20 +313,29 @@ total 9704
 
 ### Add more features to the `d6web` container
 
-So we'll stop our container set and delete the containers and images, but without killing the database volume. Then we'll make these changes, build and bring up again.
+So we'll stop our container set and delete the containers and images (all, but without killing the database volume. Then we'll make these changes, build and bring up again.
 
 ```bash
 docker-compose down --rmi all
+docker-compose build
+docker-compose up -d
+```
+
+But we if we're only making dev changes to d6web, we could just do:
+
+```bash
+docker-compose down
+docker rmi d6web
+docker-compose build
+docker-compose up -d
 ```
 
 - Move from project root to `.docker` subdir with its own name
 - Add clean urls to the image
 
-### Add a drush container to the set
+Done! With help from [socketwench / drupal-base](https://github.com/socketwench/drupal-base). Our commit: [feat(docker image d6web): Add clean urls to the image](http://noraperusin:3000/DurableDrupal/dd-d6-docker-compose-local-dev/commit/b2b1956ff4a4f198c2c77a5ada9da161c59e87ad)
 
-```bash
-bash -c 'php -r "readfile('https://s3.amazonaws.com/files.drush.org/drush.phar');" drush  && chmod +x drush && mv drush /usr/local/bin'
-```
+### Add a drush container to the set
 
 ### Use the drush container for various tasks
 
