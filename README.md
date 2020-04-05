@@ -348,9 +348,112 @@ TODO: Commit:
 ### Use the drush container for various tasks
 
 ```bash
- docker exec d6web drush status
- docker exec d6web drush pm-list
- docker exec d6web drush user-information admin
+ % docker exec d6web drush status
+ victorkane@Victors-MacBook-Air attempt01 % docker exec d6web drush status
+ Drupal version                  :  6.38
+ Site URI                        :  http://default
+ Database driver                 :  mysql
+ Database hostname               :  d6mysql
+ Database port                   :  3306
+ Database username               :  drupal601
+ Database name                   :  drupal601
+ Database                        :  Connected
+ Drupal bootstrap                :  Successful
+ Drupal user                     :
+ Default theme                   :  garland
+ Administration theme            :  garland
+ PHP executable                  :  /usr/bin/php
+ PHP configuration               :  /etc/php5/cli/php.ini
+ PHP OS                          :  Linux
+ Drush script                    :  /.composer/vendor/drush/drush/drush.php
+ Drush version                   :  8.3.2
+ Drush temp directory            :  /tmp
+ Drush configuration             :
+ Drush alias files               :
+ Install profile                 :  default
+ Drupal root                     :  /var/www/html
+ Drupal Settings File            :  sites/default/settings.php
+ Site path                       :  sites/default
+ File directory path             :  sites/default/files
+ Temporary file directory path   :  /tmp
+
+% docker exec d6web drush user-information admin
+ User ID       :  1
+ User name     :  admin
+ User mail     :  admin@durabledrupal.net
+ User roles    :  authenticated user
+ User status   :  active
+
+% docker exec d6web drush pm-list | grep Enabled
+ Core - optional  Color (color)             Module  Enabled        6.38
+ Core - optional  Comment (comment)         Module  Enabled        6.38
+ Core - optional  Database logging (dblog)  Module  Enabled        6.38
+ Core - optional  Help (help)               Module  Enabled        6.38
+ Core - optional  Menu (menu)               Module  Enabled        6.38
+ Core - optional  Taxonomy (taxonomy)       Module  Enabled        6.38
+ Core - optional  Update status (update)    Module  Enabled        6.38
+ Core - required  Block (block)             Module  Enabled        6.38
+ Core - required  Filter (filter)           Module  Enabled        6.38
+ Core - required  Node (node)               Module  Enabled        6.38
+ Core - required  System (system)           Module  Enabled        6.38
+ Core - required  User (user)               Module  Enabled        6.38
+ Other            Garland (garland)         Theme   Enabled        6.38
+
+% docker exec -it d6web /bin/bash
+root@bf97bf0c8dc0:/var/www/html# drush sql-query "select * from node"
+1	1	page		New times a bordin	1	1	1585940332	1585940332	0	0	0	0	0	0
+2	2	story		Welcome to DD D6 DC	1	1	1585940381	1585944447	0	1	0	0	0	0
+3	3	page		Virus	1	1	1585944408	1585944408	0	0	0	0	0	0
+
+docker exec -i d6web drush sql-dump | less
+-- MySQL dump 10.13  Distrib 5.5.62, for debian-linux-gnu (x86_64)
+--
+-- Host: d6mysql    Database: drupal601
+-- ------------------------------------------------------
+-- Server version       5.6.47
+
+
+victorkane@Victors-MacBook-Air attempt01 % docker exec d6web chmod +x scripts/dd-get-users.php
+victorkane@Victors-MacBook-Air attempt01 % docker exec d6web ls -l scripts/dd-get-users.php
+-rwxr-xr-x 1 1000 staff 162 Apr  5 10:38 scripts/dd-get-users.php
+victorkane@Victors-MacBook-Air attempt01 % docker exec d6web cat scripts/dd-get-users.php
+#!/usr/local/bin/drush
+
+$result = db_query('SELECT uid FROM users');
+while ($obj = db_fetch_object($result)) {
+  $user = user_load($obj->uid);
+  print_r($user);
+}%                                                                                                                                                             victorkane@Victors-MacBook-Air attempt01 % docker exec d6web scripts/dd-get-users.php
+stdClass Object
+(
+    [uid] => 2
+    [name] => victorkane
+    [pass] => dd070b0bbcb6b8b496e08dada7e01866
+    [mail] => victorkane@dd.com
+    [mode] => 0
+    [sort] => 0
+    [threshold] => 0
+    [theme] =>
+    [signature] =>
+    [signature_format] => 0
+    [created] => 1585944341
+    [access] => 0
+    [login] => 0
+    [status] => 1
+    [timezone] => -10800
+    [language] =>
+    [picture] =>
+    [init] => victorkane@dd.com
+    [data] => a:1:{s:13:"form_build_id";s:48:"form-Rhxnj7VQO5TmRzJBNPM3gNPBh_QqkbxB9RiHvWKe8ns";}
+    [form_build_id] => form-Rhxnj7VQO5TmRzJBNPM3gNPBh_QqkbxB9RiHvWKe8ns
+    [roles] => Array
+        (
+            [2] => authenticated user
+        )
+
+)
+...
+
 ```
 
 ### Refs
