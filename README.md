@@ -337,7 +337,21 @@ Done! With help from [socketwench / drupal-base](https://github.com/socketwench/
 
 ### Add a drush container to the set
 
+We can add drush 8. See [drush installation docs](http://docs.drush.org/en/master/install/)
+
+Now, how to implement this? With a separate drush image? Including drush with the d6web image, where it will have to work anyway? Including it with the mysql image? There's [more than one way to do it: How to use docker with drupal and drush?](https://stackoverflow.com/questions/35743801/how-to-use-docker-with-drupal-and-drush#40855933). Maybe the coolest way is to have a separate docker container running drush and volume share not only the drupal file system but also the mysql client executable... Oh my! Interesting discussion here too: https://github.com/RobLoach/drush-docker/issues/32. And here: [Ride the Whale presentation](https://socketwench.github.io/rideTheWhale/#/).
+
+So after entertaining myself with these options for some time, and doing a lot of stuff like `docker rm $(docker ps -a --filter "name=attempt01*" -q)`, I decided that for our purposes (run migration scripts), we can simply install composer, drush and the mysql client only on the drupal web container `d6web`.
+
+TODO: Commit:
+
 ### Use the drush container for various tasks
+
+```bash
+ docker exec d6web drush status
+ docker exec d6web drush pm-list
+ docker exec d6web drush user-information admin
+```
 
 ### Refs
 
@@ -351,3 +365,4 @@ Done! With help from [socketwench / drupal-base](https://github.com/socketwench/
 - docker4drupal
 - drush
 - etc
+

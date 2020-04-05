@@ -18,3 +18,11 @@ RUN a2dissite 000-default && a2ensite web
 RUN a2enmod rewrite
 
 RUN service apache2 restart
+
+# Install Composer & Drush
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN HOME=/ /usr/local/bin/composer global require drush/drush:~8
+RUN ln -s /.composer/vendor/drush/drush/drush /usr/local/bin/drush
+
+# Install mysql client
+RUN apt-get update && apt-get install -y mysql-client
