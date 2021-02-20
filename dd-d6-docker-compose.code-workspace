@@ -1,0 +1,15 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "workbench.colorTheme": "Noctis Lilac",
+    "php.validate.executablePath": "/opt/Local/resources/extraResources/lightning-services/php-7.3.5+10/bin/linux/bin/php",
+    "editor.formatOnType": true,
+	"editor.insertSpaces": false,
+"editor.formatOnSave": true,
+"editor.detectIndentation": false
+  }
+}
