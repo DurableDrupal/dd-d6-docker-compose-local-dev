@@ -1,4 +1,4 @@
-# Attempt 01
+# DurableDrupal D6 Docerk Compose Local Dev. Implementation
 
 ## Plan
 
@@ -9,8 +9,8 @@
 | Pull Mysql image                                                | `sudo docker pull mysql:5.6`                                                                                                                                                      | ?              |
 | Start Mysql container                                           | `$ sudo docker run -d \ --name="drupal-mysql" \ -e MYSQL_ROOT_PASSWORD=drupalroot \ -e MYSQL_DATABASE=drupal6 \ -e MYSQL_USER=drupal \ -e MYSQL_PASSWORD=drupal6pass \ mysql:5.6` | ?              |
 | Obtain Drupal Code                                              | `wget https://ftp.drupal.org/files/projects/drupal-6.38.tar.gz` \ `tar -xzf drupal-6.38.tar.gz`                                                                                   |
-| Pull Apache image` | `$ sudo docker pull nimmis/apache-php5`    | ?                                                                                                                                                                                 |
-| Build document root container with Apache image and Drupal code | `$ sudo docker run -d  \ -p 10080:80 \ -v ./drupal-6.38:/var/www/html \ --name="drupal-app" \ --link="drupal-mysql" \ nimmis/apache-php5`                                         | ?              |
+| Pull Apache image`                                              | `$ sudo docker pull nimmis/apache-php5`                                                                                                                                           | ?              |
+| Build document root container with Apache image and Drupal code | `$ sudo docker run -d \ -p 10080:80 \ -v ./drupal-6.38:/var/www/html \ --name="drupal-app" \ --link="drupal-mysql" \ nimmis/apache-php5`                                          | ?              |
 | Install Drupal interactively in the browser                     | `http://localhost:10080`                                                                                                                                                          | ?              |
 
 So in [Docker for Legacy Drupal Development](:/0267f841e7c7464b9be35acb4d1b696a), using docker only, what happens is this:
@@ -48,7 +48,7 @@ Install Drupal interactively.
 
 ### Steps taken using our `Dockerfile` and `docker-compose.yml`
 
-The container `drupal-app` is now called `d6web` and is built in the context of the project root based on `Dockerfile`, which specifies the `nimmis/apache-php5`, copies the local project files to the working directory `/var/www/html`, and exposes port 80. `docker-compose.yml` 
+The container `drupal-app` is now called `d6web` and is built in the context of the project root based on `Dockerfile`, which specifies the `nimmis/apache-php5`, copies the local project files to the working directory `/var/www/html`, and exposes port 80. `docker-compose.yml`
 
 ```bash
 victorkane@Victors-MacBook-Air attempt01 % docker-compose build
@@ -456,7 +456,7 @@ stdClass Object
 
 ```
 
-### Refs
+## Refs
 
 - [Docker for Legacy Drupal Development](:/0267f841e7c7464b9be35acb4d1b696a)
 - [Dockerize an Existing Project | Drupalize.Me](:/6de5d97befea4f4ba63951e64a40973b)
@@ -468,4 +468,3 @@ stdClass Object
 - docker4drupal
 - drush
 - etc
-
