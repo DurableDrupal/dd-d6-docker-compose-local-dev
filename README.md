@@ -255,7 +255,6 @@ docker-machine ip default
 
 ```bash
 docker-compose build
-docker-compose build
 d6mysql uses an image, skipping
 Building d6litweb
 Step 1/13 : FROM nimmis/apache-php5
@@ -327,11 +326,13 @@ docker cp lit/db.sql d6mysql:/
 
 #### Restore to database
 
+```bash
 docker exec -it d6mysql /bin/bash
 root@578a834cd55a:/# ls -l db.sql
 -rwxrwxrwx 1 1000 1000 28845997 Nov 1 2010 db.sql
 root@578a834cd55a:/# mysql -u dr_workshop -p dr_workshop < /db.sql
 Enter password:
+```
 
 #### Note on common error with large files
 
