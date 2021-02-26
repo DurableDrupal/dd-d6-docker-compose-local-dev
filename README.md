@@ -17,10 +17,10 @@ Whip up your legacy Drupal site in your own local dev environment
     - [Note on common error with large files](#note-on-common-error-with-large-files)
   - [Access app in browser](#access-app-in-browser)
     - [Note on common error with visualization of strict php errors](#note-on-common-error-with-visualization-of-strict-php-errors)
-  - [Control Controls app](#control-controls-app)
   - [Drush included!](#drush-included)
     - [Login to the web service and run drush](#login-to-the-web-service-and-run-drush)
     - [Run drush commands from the host computer command line without logging into the web server](#run-drush-commands-from-the-host-computer-command-line-without-logging-into-the-web-server)
+  - [Control Controls app](#control-controls-app)
 
 ### Fork or clone the repo
 
@@ -360,24 +360,6 @@ See discussion here: [Prevent the display of PHP's strict warnings with the Disa
 
 I solved the problem by using a contribution module mentioned in the discussion (important: not covered by official drupal security advisory policy; also I removed leading underscores in directory and file names): [\_\_\_drupal_php_strict_suppress 6.x-1.0](https://www.drupal.org/project/___drupal_php_strict_suppress/releases/6.x-1.0)
 
-### Control Controls app
-
-To stop without destroying volumes, containers:
-
-    docker-compose stop
-
-To restart if just stopped:
-
-    docker-compose start
-
-To only destroy only containers:
-
-    docker-compose down
-
-To destroy containers, volumes, images:
-
-    docker-compose down --rmi all -v
-
 ### Drush included!
 
 [Drush](https://www.drush.org/latest) comes installed, and you can use it in one of two ways:
@@ -433,3 +415,21 @@ docker exec d6litweb drush user-information joyce
                   Workshop member
  User status   :  active
 ```
+
+### Control Controls app
+
+To stop without destroying volumes, containers:
+
+    docker-compose stop
+
+To restart if just stopped:
+
+    docker-compose start
+
+To only destroy only containers:
+
+    docker-compose down
+
+To destroy containers, volumes, images:
+
+    docker-compose down --rmi all -v
