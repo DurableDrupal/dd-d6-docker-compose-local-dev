@@ -17,7 +17,8 @@ while ($obj = db_fetch_object($result)) {
   $node = node_load($obj->nid);
   array_push($content_items, $node);
 }
-print_r($content_items);
+// file_put_contents('scripts/data/inv-atype.txt',  json_encode($content_items));
+print_r(json_encode($content_items), false);
   
 /* d7 */
 /*
@@ -26,6 +27,6 @@ foreach ($result as $obj) {
   $node = node_load($obj->nid);
   array_push($content_items, $node);
 }
-print_r($content_items);
+print_r(json_encode($content_items), false);
 */
 
